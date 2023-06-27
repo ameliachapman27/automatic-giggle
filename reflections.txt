@@ -1,0 +1,1 @@
+Yesterday I learned about what a performance measure is and how there can be multiple goals for a similar task. For example, your goal in generating a route can be either minimizing the time to get to the destination or maximizing enjoyment.
