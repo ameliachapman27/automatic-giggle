@@ -23,8 +23,8 @@ has_prereqs(Course, Prerequisite) :- prereqs(Course, Prerequisites), member(Prer
 no_prereqs(Course) :- not(has_prereqs(Course, Prerequisite)).
 
 intro(Course) :- 
-    fall(Course), no_prereqs(Course);
-    spring(Course), has_prereqs(Course, Prerequisite), no_prereqs(Prerequisite).
+    (fall(Course), no_prereqs(Course));
+    (spring(Course), has_prereqs(Course, Prerequisite), no_prereqs(Prerequisite)).
     /* is intro if offered fall AND no prerequisite OR offered spring AND prerequisite has no prerequisite */
 
 intermediate(Course) :- 
@@ -34,7 +34,34 @@ intermediate(Course) :-
     /* is intermediate if not intro and if prereqs are intros */
 
 upper_level(Course) :-
-    has_prereqs(Course, Prerequisite), not(intro(Prerequisite));
-    has_prereqs(Course, cs22), 
-    has_prereqs(Course, Prerequisite), intro(Prerequisite).
+    (has_prereqs(Course, Prerequisite), not(intro(Prerequisite)));
+    
+    (has_prereqs(Course, cs22), 
+    has_prereqs(Course, Prerequisite), intro(Prerequisite)).
     /* is upper level if the prereqs are not intros, or if its prereqs are cs22 and intros */
+
+
+
+student(mark, []).
+student(elon, []).
+student(sheryl, []).
+student(jeff, []).
+
+has_taken(Student, Course) :- 
+    (student(Student, Courses), member(Course, Courses));
+    (has_prereqs(CanTakeClass, Course), can_take(Student, CanTakeClass)).
+    /* If student can take a certain class, then they have taken its prerequisites and its prerequisite's prerequisites */
+can_take(Student, Course) :- 
+    has_prereqs(Course, Prerequisite),
+    has_taken(Student, Prerequisite).
+    /* Student can take class if they have taken its prerequisites */
+can_take(Student, cs141) :- 
+    has_taken(Student, cs22),
+    (has_taken(Student, cs16); has_taken(Student, cs)).
+can_take(Student, cs126) :- has_taken(Student, cs22), has_taken(Student, cs32).
+
+has_taken(mark, cs141).
+can_take(elon, [cs32, cs18]).
+can_take(sheryl, Course) :- upper_level(Course).
+has_taken(jeff, not(cs32)).
+can_take(jeff, cs32).
