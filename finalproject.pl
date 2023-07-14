@@ -42,26 +42,22 @@ upper_level(Course) :-
 
 
 
-student(mark, []).
-student(elon, []).
-student(sheryl, []).
-student(jeff, []).
+has_takenAll(mark, [cs141, cs16, cs18, cs22]).
+has_takenAll(elon, [cs17, cs22, cs16, cs15]).
+has_takenAll(sheryl, [cs33, cs32, cs16, cs18, cs15, cs17]).
+has_takenAll(jeff, [cs16, cs18, cs15, cs17, cs33, cs166]).
+has_taken(Student, Course) :- has_takenAll(Student, Courses), member(Course, Courses).
 
-has_taken(Student, Course) :- 
-    (student(Student, Courses), member(Course, Courses));
-    (has_prereqs(CanTakeClass, Course), can_take(Student, CanTakeClass)).
-    /* If student can take a certain class, then they have taken its prerequisites and its prerequisite's prerequisites */
 can_take(Student, Course) :- 
     has_prereqs(Course, Prerequisite),
-    has_taken(Student, Prerequisite).
+    has_taken(Student, Prerequisite),
+    not(has_taken(Student, Course)).
     /* Student can take class if they have taken its prerequisites */
-can_take(Student, cs141) :- 
+can_take141(Student) :- 
     has_taken(Student, cs22),
-    (has_taken(Student, cs16); has_taken(Student, cs)).
-can_take(Student, cs126) :- has_taken(Student, cs22), has_taken(Student, cs32).
-
-has_taken(mark, cs141).
-can_take(elon, [cs32, cs18]).
-can_take(sheryl, Course) :- upper_level(Course).
-has_taken(jeff, not(cs32)).
-can_take(jeff, cs32).
+    (has_taken(Student, cs16); has_taken(Student, cs18)),
+    not(has_taken(Student, cs141)).
+can_take126(Student) :- 
+    has_taken(Student, cs22), 
+    has_taken(Student, cs32),
+    not(has_taken(Student, cs126)).
