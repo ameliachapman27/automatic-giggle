@@ -10,7 +10,7 @@ prereqs(cs33, [cs16, cs18]).
 prereqs(cs126, [cs22, cs22]).
     /* solid line (both courses) */
 prereqs(cs141, [cs22, cs16, cs18]).
-    /* solid line for cs22 and dotted lines for cs16/cs18 so I'm not really sure what's going on */
+    /* solid line for cs22 and dotted lines for cs16/cs18 */
 prereqs(cs166, [cs33]).
 
 
